@@ -15,4 +15,4 @@ This is an animation of a line that follows the mouse cursor
 
 ## turtlegraphics
 This is an animation with the technique turtle graphics
-[![turtlegraphics](https://www.youtube.com/watch?v=-ZW0bihDjUY/0.jpg)](https://www.youtube.com/watch?v=-ZW0bihDjUY)
+[![turtlegraphics](http://i3.ytimg.com/vi/-ZW0bihDjUY/maxresdefault.jpg)](https://www.youtube.com/watch?v=-ZW0bihDjUY)
