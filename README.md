@@ -1,6 +1,9 @@
 # demo
 Sample projects made with BGRABitmap and related packages
 
+## dots
+This is a demo to play with random, dots and lines
+
 ## hello_world
 This is an example of animations with easings and how to use them with BGRABitmap
 
