@@ -12,3 +12,7 @@ This is an example of animations with easings and how to use them with BGRABitma
 ## mouse_tail
 This is an animation of a line that follows the mouse cursor
 ![mouse_tail](https://raw.githubusercontent.com/bgrabitmap/demo/master/docs/img/mousetail.gif)
+
+## turtlegraphics
+This is an animation with the technique turtle graphics
+[![turtlegraphics](https://www.youtube.com/watch?v=-ZW0bihDjUY/0.jpg)](https://www.youtube.com/watch?v=-ZW0bihDjUY)
