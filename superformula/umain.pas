@@ -49,6 +49,8 @@ begin
     a := MinDouble;
   if b = 0 then
     b := MinDouble;
+  if m = 0 then
+    m := MinDouble;
   if n1 = 0 then
     n1 := MinDouble;
   if n2 = 0 then
