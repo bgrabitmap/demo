@@ -75,6 +75,7 @@ end;
 procedure TFMain.FormDestroy(Sender: TObject);
 begin
   Application.OnIdle := nil;
+  FVoxelMap.Free;
 end;
 
 procedure TFMain.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -164,7 +165,7 @@ var
   groundLevel: TBGRAPixel;
 begin
   with (APos - FOrig) do
-  groundLevel := FMap.GetPixel(round(x),round(z));
+  groundLevel := FMap.GetPixel(x,z);
   if groundLevel.alpha = 255 then
     result := groundLevel.green*FUnit.y + FOrig.y
   else
