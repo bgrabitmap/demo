@@ -93,7 +93,7 @@ var
   x: double = 0;
   y: double = 0;
 begin
-  theta := 0;
+  theta := 0.01; // prevent starting line
   Bitmap.Canvas2D.resetTransform;
   Bitmap.Canvas2D.translate(Width div 2, Height div 2);
   Bitmap.Canvas2D.lineWidth := 1;
@@ -118,6 +118,7 @@ begin
     Bitmap.Canvas2D.lineTo(x, y);
     theta += 0.01; // resolution of the drawing
   end;
+  Bitmap.Canvas2D.closePath; // prevent holes
   Bitmap.Canvas2D.stroke;
 end;
 
