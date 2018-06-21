@@ -6,6 +6,11 @@ This is a demo to play with random, dots and lines.
 
 ![dots](https://raw.githubusercontent.com/bgrabitmap/demo/master/docs/img/dots.PNG)
 
+## fractal_tree
+🌲 with randomness, to make it fractal, tweak it a bit adding even values.
+
+![fractal_tree](https://raw.githubusercontent.com/bgrabitmap/demo/master/docs/img/fractaltree.PNG)
+
 ## hello_world
 This is an example of animations with easings and how to use them with BGRABitmap.
 
