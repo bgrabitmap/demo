@@ -34,6 +34,9 @@ This is an animation based on the superformula.
 
 ![superformula](https://raw.githubusercontent.com/bgrabitmap/demo/master/docs/img/superformula.gif)
 
+## superformula_ui
+This is the same algorythm of the superformula, but you can tweak it with controls (set color, line widh, and actual formula values).
+
 ## turtlegraphics
 This is an animation with the technique turtle graphics.
 
