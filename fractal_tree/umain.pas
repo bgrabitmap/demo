@@ -61,6 +61,7 @@ begin
     x2 := x1 + (cos(angle * deg_to_rad) * depth * multiplier);
     y2 := y1 + (sin(angle * deg_to_rad) * depth * multiplier);
     drawLine(x1, y1, x2, y2, depth);
+    // Use even values without randomness to get a 'real' fractal image
     drawTree(x2, y2, angle - randomrange(15,50), depth - 1.44);
     drawTree(x2, y2, angle + randomrange(10,25), depth - 0.72);
     drawTree(x2, y2, angle - randomrange(10,25), depth - 3);
