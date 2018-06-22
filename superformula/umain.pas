@@ -45,18 +45,18 @@ end;
 function TfrmSuperFormula.r(theta, a, b, m, n1, n2, n3: double): double;
 begin
   { Preventing Exceptions }
-  if a = 0 then
-    a := MinDouble;
-  if b = 0 then
-    b := MinDouble;
-  if m = 0 then
-    m := MinDouble;
-  if n1 = 0 then
-    n1 := MinDouble;
-  if n2 = 0 then
-    n2 := MinDouble;
-  if n3 = 0 then
-    n3 := MinDouble;
+  if a <= 0 then
+    a := Mindouble;
+  if b <= 0 then
+    b := Mindouble;
+  if m <= 0 then
+    m := Mindouble;
+  if n1 <= 0 then
+    n1 := Mindouble;
+  if n2 <= 0 then
+    n2 := Mindouble;
+  if n3 <= 0 then
+    n3 := Mindouble;
   try
     { Actual Formula }
     Result := power(power(abs(cos(m * theta / 4) / a), n2) +
@@ -111,7 +111,7 @@ begin
       6, // m - number of spikes
       0.5, // n1 - roundness
       sin(t) * 0.5 + 0.5, // n2 - shape
-      cos(t) * 0.5 + 0.5 // n3 - shape
+      tan(t) * 0.5 + 0.5 // n3 - shape
       );
     x := rad * cos(theta) * (Width div 4);
     y := rad * sin(theta) * (Height div 4);

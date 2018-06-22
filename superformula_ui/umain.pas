@@ -63,17 +63,17 @@ implementation
 function TfrmSuperFormula.r(theta, a, b, m, n1, n2, n3: double): double;
 begin
   { Preventing Exceptions }
-  if a = 0 then
+  if a <= 0 then
     a := MinDouble;
-  if b = 0 then
+  if b <= 0 then
     b := MinDouble;
-  if m = 0 then
+  if m <= 0 then
     m := MinDouble;
-  if n1 = 0 then
+  if n1 <= 0 then
     n1 := MinDouble;
-  if n2 = 0 then
+  if n2 <= 0 then
     n2 := MinDouble;
-  if n3 = 0 then
+  if n3 <= 0 then
     n3 := MinDouble;
   try
     { Actual Formula }
