@@ -110,12 +110,20 @@ begin
       1, // b - size and control spikes
       6, // m - number of spikes
       0.5, // n1 - roundness
-      sin(t) * 0.5 + 0.5, // n2 - shape
+      tan(t) * 0.5 + 0.5, // n2 - shape
       tan(t) * 0.5 + 0.5 // n3 - shape
       );
     x := rad * cos(theta) * (Width div 4);
     y := rad * sin(theta) * (Height div 4);
-    Bitmap.Canvas2D.lineTo(x, y);
+    try
+      Bitmap.Canvas2D.lineTo(x, y);
+    except
+      on e: exception do
+      begin
+        // prevent floating point overflow
+        exit;
+      end;
+    end;
     theta += 0.01; // resolution of the drawing
   end;
   Bitmap.Canvas2D.closePath; // prevent holes
