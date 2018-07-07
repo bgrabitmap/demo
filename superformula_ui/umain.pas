@@ -46,44 +46,98 @@ type
     procedure vsPreviewRedraw(Sender: TObject; Bitmap: TBGRABitmap);
     procedure FormCreate(Sender: TObject);
   private
-    function r(theta, a, b, m, n1, n2, n3: double): double;
+
   public
 
   end;
 
 var
   frmSuperFormula: TfrmSuperFormula;
+  MAX_LOG: Double = 0.0;
+  MIN_LOG: Double = 0.0;
+  MAX_R: Double = 100.0;
 
 implementation
+
+function SafePower(a, b: Double; out c: Double): Boolean;
+var
+  tmp: Double;
+begin
+  Result := true;
+  if (a < 0) then
+    raise Exception.Create('1st argument of Power() must not be negative');
+  if (a = 0) then begin
+    if (b = 0) then
+      raise Exception.Create('Both arguments of Power() must not be zero.');
+    c := 0;
+    exit;
+  end;
+
+  if MAX_LOG = 0.0 then
+    MAX_LOG := ln(MaxDouble);
+  if MIN_LOG = 0.0 then
+    MIN_LOG := ln(MinDouble);
+
+  // ln(a^b) = b ln(a)
+  tmp := b * ln(a);
+  if tmp > MAX_LOG then
+    Result := false
+  else
+  if tmp < MIN_LOG then
+    c := 0.0
+  else
+    c := exp(tmp);
+end;
+
+function r(theta, a, b, m, n1, n2, n3: double): double;
+const
+  EPS = 1E-9;
+var
+  c, pc, s, ps: Double;
+begin
+  if (a = 0) then
+    raise Exception.Create('a must not be zero.');
+  if (b = 0) then
+    raise Exception.Create('b must not be zero');
+  if (m = 0) then
+    raise Exception.Create('m must not be zero');
+  if (n1 = 0) then
+    raise Exception.Create('n1 must not be zero');
+  if (n2 = 0) then
+    raise Exception.Create('n2 must not be zero');
+  if (n3 = 0) then
+    raise Exception.Create('n3 must not be zero');
+
+  c := abs(cos(m * theta / 4) / a);
+  if c < EPS then
+    pc := 0
+  else
+  if not SafePower(c, n2, pc) then begin
+    Result := MAX_R;
+    exit;
+  end;
+
+  s := abs(sin(m * theta / 4) / b);
+  if s < EPS then
+    ps := 0
+  else
+  if not SafePower(s, n3, ps) then begin
+    Result := MAX_R;
+    exit;
+  end;
+
+  if pc + ps < EPS then
+    Result := 0
+  else
+  if not SafePower(pc + ps, -1/n1, Result) then
+    Result := MAX_R;
+
+  if Result > MAX_R then Result := MAX_R;
+end;
 
 {$R *.lfm}
 
 { TfrmSuperFormula }
-
-function TfrmSuperFormula.r(theta, a, b, m, n1, n2, n3: double): double;
-begin
-  { Preventing Exceptions }
-  if a <= 0 then
-    a := MinDouble;
-  if b <= 0 then
-    b := MinDouble;
-  if m <= 0 then
-    m := MinDouble;
-  if n1 <= 0 then
-    n1 := MinDouble;
-  if n2 <= 0 then
-    n2 := MinDouble;
-  if n3 <= 0 then
-    n3 := MinDouble;
-  try
-    { Actual Formula }
-    Result := power(power(abs(cos(m * theta / 4) / a), n2) +
-      power(abs(sin(m * theta / 4) / b), n3), -1 / n1)
-  except
-    on e: Exception do
-      Result := 1;
-  end;
-end;
 
 procedure TfrmSuperFormula.vsPreviewRedraw(Sender: TObject; Bitmap: TBGRABitmap);
 var
