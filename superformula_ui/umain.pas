@@ -199,7 +199,19 @@ begin
   FLayers.AddLayerFromOwnedOriginal(superformula);
 
   if FileExists(Application.Location + 'superformula.data') then
+  begin
     superformula.LoadFromFile(Application.Location + 'superformula.data');
+    cbLineColor.ButtonColor := superformula.LineColor;
+    cbFillColor.ButtonColor := superformula.FillColor;
+    edValueA.Value := superformula.a;
+    edValueB.Value := superformula.b;
+    edValueM.Value := superformula.m;
+    edValueN1.Value := superformula.n1;
+    edValueN2.Value := superformula.n2;
+    edValueN3.Value := superformula.n3;
+    edMultiplier.Value := superformula.Multiplier;
+    edLineWidth.Value := superformula.LineWidth;
+  end;
 end;
 
 procedure TfrmSuperFormula.OriginalChange(Sender: TObject;
