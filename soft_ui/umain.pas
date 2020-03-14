@@ -64,8 +64,8 @@ procedure TfrmSoftUI.BGRAMixedShadowRedraw(Sender: TObject; Bitmap: TBGRABitmap
   );
 begin
   Bitmap.FillTransparent;
-  InnerShadow(Bitmap, BGRABackgroundColor, BGRADarkShadowColor, BGRALightShadowColor);
   DropShadow(Bitmap, BGRABackgroundColor, BGRADarkShadowColor, BGRALightShadowColor);
+  InnerShadow(Bitmap, BGRABackgroundColor, BGRADarkShadowColor, BGRALightShadowColor);
 
   // TEXT
   Bitmap.TextRect(Rect(0, 0, Bitmap.Width, Bitmap.Height), TControl(Sender).Caption,
