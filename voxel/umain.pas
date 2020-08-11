@@ -83,12 +83,20 @@ end;
 
 procedure TFMain.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
-  if Key <= high(FKeys) then FKeys[Key] := true;
+  if Key <= high(FKeys) then
+  begin
+    FKeys[Key] := true;
+    Key := 0;
+  end;
 end;
 
 procedure TFMain.FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
-  if Key <= high(FKeys) then FKeys[Key] := false;
+  if Key <= high(FKeys) then
+  begin
+    FKeys[Key] := false;
+    Key := 0;
+  end;
 end;
 
 procedure TFMain.AppOnIdle(Sender: TObject; var Done: Boolean);
