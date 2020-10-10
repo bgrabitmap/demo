@@ -21,6 +21,7 @@ type
     FSpeed: double;
   public
     constructor Create(const aResource: string; const aSpeed: double);
+    destructor Destroy; override;
     property Image: TBGRABitmap read FImage;
     property Speed: double read FSpeed;
     property Angle: double read FAngle;
@@ -93,6 +94,12 @@ begin
   FImage := TBGRABitmap.Create();
   FImage.LoadFromResource(aResource);
   FSpeed := aSpeed;
+end;
+
+destructor TAtom.Destroy;
+begin
+  FImage.Free;
+  inherited Destroy;
 end;
 
 procedure TAtom.Step;
