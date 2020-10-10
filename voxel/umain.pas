@@ -55,13 +55,16 @@ uses BGRAMatrix3D, LCLType;
 { TFMain }
 
 procedure TFMain.FormCreate(Sender: TObject);
+var
+  resPath: string;
 begin
-  FMap := TBGRABitmap.Create('map.png');
+  resPath := {$IFDEF DARWIN}ExtractFilePath(Application.ExeName)+'../../../'{$ELSE}''{$ENDIF};
+  FMap := TBGRABitmap.Create(resPath+'map.png');
   FUnit := Point3D(1,1/3,1);
   FOrig := Point3D((-FMap.Width div 2)*FUnit.x,-128*FUnit.y,(-FMap.Height div 2)*FUnit.z);
   FVoxelMap := TVoxelMap.Create(FMap,
-                    TBGRABitmap.Create('marble.png'), TBGRABitmap.Create('wooden_floor.png'), TBGRABitmap.Create('stone.png'), TBGRABitmap.Create('water.png'),
-                    TBGRABitmap.Create('wall.png'),  TBGRABitmap.Create('wooden_wall.png'),  TBGRABitmap.Create('stone.png'), TBGRABitmap.Create('marble.png'),
+                    TBGRABitmap.Create(resPath+'marble.png'), TBGRABitmap.Create(resPath+'wooden_floor.png'), TBGRABitmap.Create(resPath+'stone.png'), TBGRABitmap.Create(resPath+'water.png'),
+                    TBGRABitmap.Create(resPath+'wall.png'),  TBGRABitmap.Create(resPath+'wooden_wall.png'),  TBGRABitmap.Create(resPath+'stone.png'), TBGRABitmap.Create(resPath+'marble.png'),
                     FOrig, FUnit);
   FViewPoint := Point3D(0,0,0);
   FViewPoint.y := GetGroundLevel(FViewPoint)+ StandingHeight;
@@ -80,12 +83,20 @@ end;
 
 procedure TFMain.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
-  if Key <= high(FKeys) then FKeys[Key] := true;
+  if Key <= high(FKeys) then
+  begin
+    FKeys[Key] := true;
+    Key := 0;
+  end;
 end;
 
 procedure TFMain.FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
-  if Key <= high(FKeys) then FKeys[Key] := false;
+  if Key <= high(FKeys) then
+  begin
+    FKeys[Key] := false;
+    Key := 0;
+  end;
 end;
 
 procedure TFMain.AppOnIdle(Sender: TObject; var Done: Boolean);
