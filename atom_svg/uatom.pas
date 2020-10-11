@@ -80,6 +80,7 @@ procedure TAtoms.Draw(const aBitmap: TBGRABitmap; const ADPI: single);
 var
   i: integer;
 begin
+  aBitmap.Canvas2D.save;
   for i := 0 to FAtoms.Count-1 do
     try
       aBitmap.Canvas2D.resetTransform;
@@ -88,6 +89,7 @@ begin
       FAtoms[i].Image.Draw(aBitmap.Canvas2D,taCenter, tlCenter, 0, 0, ADPI);
     except
     end;
+  aBitmap.Canvas2D.restore;     
 end;
 
 { TAtom }
