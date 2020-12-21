@@ -7,14 +7,19 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  BGRAVirtualScreen, BGRABitmap, BCTypes, BGRABitmapTypes;
+  BGRAVirtualScreen, BGRABitmap, BGRABitmapTypes;
+
+const
+  ColorStep = 40;
+  FractalDepth = 7;
+  ColorGamma = 0.7;
 
 type
 
   { TForm1 }
 
   TProp = record
-    thecolor: byte;
+    thecolor: integer;
     x, y: single;
   end;
 
@@ -34,10 +39,6 @@ type
     procedure Timer1Timer(Sender: TObject);
   private
     zoom: single;
-    thecolor: Byte;
-    x, y: single;
-    myData: TData;
-
   public
 
   end;
@@ -46,6 +47,8 @@ var
   Form1: TForm1;
 
 implementation
+
+uses math;
 
 {$R *.lfm}
 
@@ -66,6 +69,10 @@ end;
 { TForm1 }
 
 procedure TForm1.BGRAVirtualScreen1Redraw(Sender: TObject; Bitmap: TBGRABitmap);
+var
+  thecolor, thecolor0: integer;
+  x, y: single;
+  myData: TData;
 
 procedure Translate(toX, toY: single);
 begin
@@ -97,44 +104,47 @@ procedure Ellipse(ax, ay, aw, ah: single);
 begin
   ax += x;
   ay += y;
-  Bitmap.EllipseAntialias(ax, ay, aw / 2, ah / 2,BGRA(thecolor, thecolor, thecolor), 1, BGRA(thecolor, thecolor, thecolor));
+  Bitmap.FillEllipseAntialias(ax, ay, aw / 2, ah / 2, TByteMask.New(round(power(thecolor, ColorGamma))));
 end;
 
-procedure Circles(w: single);
+procedure Circles(w: single; depth: integer);
 begin
-  if (w > 15) then
+  if (depth > 0) then
   begin
-    thecolor += 10;
+    thecolor += ColorStep;
     Ellipse(w / 2, 0, w, w);
-    Circles(w / 2);
+    Circles(w / 2, depth - 1);
     push();
+    thecolor -= theColor0;
     Translate(w, 0);
     Ellipse(w / 2, 0, w, w);
-    Circles(w / 2);
+    Circles(w / 2, depth - 1);
     pop();
   end;
 end;
 
 begin
-  Bitmap.Fill(BGRABlack);
-  thecolor := 0;
+  thecolor0 := -round(ln(zoom/2)/ln(2)*ColorStep) - ColorStep;
+  thecolor := thecolor0;
   x := 0;
   y := 0;
-  Translate(0, Height / 2);
-  circles(width * zoom);
+  Translate(0, Bitmap.Height / 2);
+
+  circles(Bitmap.Width * zoom, FractalDepth);
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
   zoom := 1;
-  thecolor := 0;
+  BGRAVirtualScreen1.BitmapAutoScale:= false;
+  BGRAVirtualScreen1.Color := clBlack;
 end;
 
 procedure TForm1.Timer1Timer(Sender: TObject);
 begin
   zoom *= 1.015;
-  if (zoom > 2) then
-    zoom := 1;
+  if (zoom >= 2) then
+    zoom := zoom / 2;
     BGRAVirtualScreen1.DiscardBitmap;
 end;
 
