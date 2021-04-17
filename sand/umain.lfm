@@ -1,0 +1,39 @@
+object frmMain: TfrmMain
+  Left = 355
+  Height = 240
+  Top = 119
+  Width = 320
+  BorderStyle = bsNone
+  Caption = 'BGRABitmap Sand'
+  ClientHeight = 240
+  ClientWidth = 320
+  Color = clWhite
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyDown = FormKeyDown
+  OnResize = FormResize
+  Position = poScreenCenter
+  LCLVersion = '2.1.0.0'
+  WindowState = wsFullScreen
+  object BGRAVirtualScreenMain: TBGRAVirtualScreen
+    Left = 0
+    Height = 240
+    Top = 0
+    Width = 320
+    OnRedraw = BGRAVirtualScreenMainRedraw
+    Align = alClient
+    Alignment = taLeftJustify
+    Color = clWhite
+    ParentColor = False
+    TabOrder = 0
+    OnMouseDown = BGRAVirtualScreenMainMouseDown
+    OnMouseMove = BGRAVirtualScreenMainMouseMove
+    OnMouseUp = BGRAVirtualScreenMainMouseUp
+  end
+  object TimerMain: TTimer
+    Interval = 15
+    OnTimer = TimerMainTimer
+    Left = 97
+    Top = 30
+  end
+end
