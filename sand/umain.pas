@@ -218,7 +218,7 @@ begin
             putSand(x, y);
     end;
 
-  rowDelta := w;
+  rowDelta := sand.AllocatedWidth;
   if sand.LineOrder = riloBottomToTop then rowDelta := -rowDelta;
 
   for y := h - 1 downto 0 do
