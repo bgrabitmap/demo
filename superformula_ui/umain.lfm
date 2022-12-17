@@ -1,22 +1,21 @@
 object frmSuperFormula: TfrmSuperFormula
   Left = 348
-  Height = 700
+  Height = 560
   Top = 143
-  Width = 500
+  Width = 400
   Caption = 'Superformula'
-  ClientHeight = 700
-  ClientWidth = 500
-  DesignTimePPI = 120
+  ClientHeight = 560
+  ClientWidth = 400
   OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   Position = poScreenCenter
-  LCLVersion = '1.8.4.0'
+  LCLVersion = '2.2.2.0'
   object vsPreview: TBGRAVirtualScreen
     Left = 0
-    Height = 495
-    Top = 205
-    Width = 500
+    Height = 377
+    Top = 183
+    Width = 400
     OnRedraw = vsPreviewRedraw
     Align = alClient
     Alignment = taLeftJustify
@@ -30,9 +29,9 @@ object frmSuperFormula: TfrmSuperFormula
   end
   object pnlControls: TPanel
     Left = 0
-    Height = 205
+    Height = 183
     Top = 0
-    Width = 500
+    Width = 400
     Align = alTop
     AutoSize = True
     ChildSizing.LeftRightSpacing = 16
@@ -42,24 +41,24 @@ object frmSuperFormula: TfrmSuperFormula
     ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 4
-    ClientHeight = 205
-    ClientWidth = 500
+    ClientHeight = 183
+    ClientWidth = 400
     ParentFont = False
     TabOrder = 1
     object lblValueA: TLabel
       Left = 16
-      Height = 28
+      Height = 24
       Top = 16
-      Width = 153
+      Width = 113
       Caption = 'Spikes A:'
       ParentColor = False
       ParentFont = False
     end
     object edValueA: TFloatSpinEdit
-      Left = 185
-      Height = 28
+      Left = 145
+      Height = 24
       Top = 16
-      Width = 82
+      Width = 66
       DecimalPlaces = 3
       Increment = 0.05
       MaxValue = 1000000
@@ -70,19 +69,19 @@ object frmSuperFormula: TfrmSuperFormula
       Value = 1
     end
     object lblValueB: TLabel
-      Left = 283
-      Height = 28
+      Left = 227
+      Height = 24
       Top = 16
-      Width = 106
+      Width = 76
       Caption = 'Spikes B:'
       ParentColor = False
       ParentFont = False
     end
     object edValueB: TFloatSpinEdit
-      Left = 405
-      Height = 28
+      Left = 319
+      Height = 24
       Top = 16
-      Width = 79
+      Width = 65
       DecimalPlaces = 3
       Increment = 0.05
       MaxValue = 1000000
@@ -94,20 +93,19 @@ object frmSuperFormula: TfrmSuperFormula
     end
     object lblValueM: TLabel
       Left = 16
-      Height = 28
-      Top = 52
-      Width = 153
+      Height = 24
+      Top = 48
+      Width = 113
       Caption = 'Number of Spikes:'
       ParentColor = False
       ParentFont = False
     end
     object edValueM: TFloatSpinEdit
-      Left = 185
-      Height = 28
-      Top = 52
-      Width = 82
+      Left = 145
+      Height = 24
+      Top = 48
+      Width = 66
       DecimalPlaces = 3
-      Increment = 1
       MaxValue = 1000000
       MinValue = 0.1
       OnChange = edValueMChange
@@ -116,19 +114,19 @@ object frmSuperFormula: TfrmSuperFormula
       Value = 24
     end
     object lblValueN1: TLabel
-      Left = 283
-      Height = 28
-      Top = 52
-      Width = 106
+      Left = 227
+      Height = 24
+      Top = 48
+      Width = 76
       Caption = 'Shape N1:'
       ParentColor = False
       ParentFont = False
     end
     object edValueN1: TFloatSpinEdit
-      Left = 405
-      Height = 28
-      Top = 52
-      Width = 79
+      Left = 319
+      Height = 24
+      Top = 48
+      Width = 65
       DecimalPlaces = 3
       Increment = 0.05
       MaxValue = 1000000
@@ -140,18 +138,18 @@ object frmSuperFormula: TfrmSuperFormula
     end
     object lblValueN2: TLabel
       Left = 16
-      Height = 28
-      Top = 88
-      Width = 153
+      Height = 24
+      Top = 80
+      Width = 113
       Caption = 'Shape N2:'
       ParentColor = False
       ParentFont = False
     end
     object edValueN2: TFloatSpinEdit
-      Left = 185
-      Height = 28
-      Top = 88
-      Width = 82
+      Left = 145
+      Height = 24
+      Top = 80
+      Width = 66
       DecimalPlaces = 3
       Increment = 0.05
       MaxValue = 1000000
@@ -162,19 +160,19 @@ object frmSuperFormula: TfrmSuperFormula
       Value = 1
     end
     object lblValueN3: TLabel
-      Left = 283
-      Height = 28
-      Top = 88
-      Width = 106
+      Left = 227
+      Height = 24
+      Top = 80
+      Width = 76
       Caption = 'Shape N3:'
       ParentColor = False
       ParentFont = False
     end
     object edValueN3: TFloatSpinEdit
-      Left = 405
-      Height = 28
-      Top = 88
-      Width = 79
+      Left = 319
+      Height = 24
+      Top = 80
+      Width = 65
       DecimalPlaces = 3
       Increment = 0.05
       MaxValue = 1000000
@@ -186,18 +184,18 @@ object frmSuperFormula: TfrmSuperFormula
     end
     object lblMultiplier: TLabel
       Left = 16
-      Height = 28
-      Top = 124
-      Width = 153
+      Height = 24
+      Top = 112
+      Width = 113
       Caption = 'Size Multiplier:'
       ParentColor = False
       ParentFont = False
     end
     object edMultiplier: TFloatSpinEdit
-      Left = 185
-      Height = 28
-      Top = 124
-      Width = 82
+      Left = 145
+      Height = 24
+      Top = 112
+      Width = 66
       DecimalPlaces = 0
       Increment = 25
       MaxValue = 1000000
@@ -208,62 +206,59 @@ object frmSuperFormula: TfrmSuperFormula
       Value = 200
     end
     object lblLineWidth: TLabel
-      Left = 283
-      Height = 28
-      Top = 124
-      Width = 106
+      Left = 227
+      Height = 24
+      Top = 112
+      Width = 76
       Caption = 'Line Width:'
       ParentColor = False
       ParentFont = False
     end
     object edLineWidth: TFloatSpinEdit
-      Left = 405
-      Height = 28
-      Top = 124
-      Width = 79
-      Increment = 1
+      Left = 319
+      Height = 24
+      Top = 112
+      Width = 65
       MaxValue = 100
-      MinValue = 0
       OnChange = edLineWidthChange
       ParentFont = False
       TabOrder = 7
-      Value = 0
     end
     object lblLineColor: TLabel
       Left = 16
-      Height = 28
-      Top = 160
-      Width = 153
+      Height = 22
+      Top = 144
+      Width = 113
       Caption = 'Line Color:'
       ParentColor = False
       ParentFont = False
     end
     object cbLineColor: TColorButton
-      Left = 185
-      Height = 28
-      Top = 160
-      Width = 82
+      Left = 145
+      Height = 22
+      Top = 144
+      Width = 66
       BorderWidth = 2
       ButtonColorSize = 16
       ButtonColor = 8404992
-      Constraints.MinHeight = 28
+      Constraints.MinHeight = 22
       OnColorChanged = cbLineColorColorChanged
       ParentFont = False
     end
     object lblFillColor: TLabel
-      Left = 283
-      Height = 28
-      Top = 160
-      Width = 106
+      Left = 227
+      Height = 22
+      Top = 144
+      Width = 76
       Caption = 'Fill Color:'
       ParentColor = False
       ParentFont = False
     end
     object cbFillColor: TColorButton
-      Left = 405
-      Height = 28
-      Top = 160
-      Width = 79
+      Left = 319
+      Height = 22
+      Top = 144
+      Width = 65
       BorderWidth = 2
       ButtonColorSize = 16
       ButtonColor = 12615680

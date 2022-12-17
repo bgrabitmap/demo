@@ -56,7 +56,7 @@ type
     procedure vsPreviewRedraw(Sender: TObject; Bitmap: TBGRABitmap);
     procedure FormCreate(Sender: TObject);
   private
-    procedure OriginalChange(Sender: TObject; {%H-}AOriginal: TBGRALayerCustomOriginal);
+    procedure OriginalChange(ASender: TObject; AOriginal: TBGRALayerCustomOriginal; var ADiff: TBGRAOriginalDiff);
   public
     FLayers: TBGRALayeredBitmap;
   end;
@@ -214,8 +214,8 @@ begin
   end;
 end;
 
-procedure TfrmSuperFormula.OriginalChange(Sender: TObject;
-  AOriginal: TBGRALayerCustomOriginal);
+procedure TfrmSuperFormula.OriginalChange(ASender: TObject;
+  AOriginal: TBGRALayerCustomOriginal; var ADiff: TBGRAOriginalDiff);
 begin
   vsPreview.DiscardBitmap;
 end;
