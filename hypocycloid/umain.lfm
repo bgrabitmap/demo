@@ -1,0 +1,31 @@
+object frmMain: TfrmMain
+  Left = 285
+  Height = 240
+  Top = 31
+  Width = 320
+  Caption = 'Hypocycloid'
+  ClientHeight = 240
+  ClientWidth = 320
+  Position = poScreenCenter
+  LCLVersion = '2.2.6.0'
+  object BGRAVirtualScreen1: TBGRAVirtualScreen
+    Left = 0
+    Height = 240
+    Top = 0
+    Width = 320
+    OnRedraw = BGRAVirtualScreen1Redraw
+    Align = alClient
+    Alignment = taLeftJustify
+    Caption = 'BGRAVirtualScreen1'
+    Color = clWhite
+    ParentColor = False
+    TabOrder = 0
+    OnResize = BGRAVirtualScreen1Resize
+  end
+  object Timer1: TTimer
+    Interval = 15
+    OnTimer = Timer1Timer
+    Left = 33
+    Top = 35
+  end
+end
