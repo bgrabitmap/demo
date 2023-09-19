@@ -19,7 +19,7 @@ unit umain;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, Spin,
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   BGRAVirtualScreen, BGRABitmap, BGRABitmapTypes, BCTypes, BCTrackbarUpdown,
   Math;
 
@@ -103,7 +103,7 @@ begin
 
     strokeStyle(BGRA(51, 51, 51));
     beginPath();
-    circle(ptCenter.x, ptCenter.y, 2*px);
+    circle(ptCenter.x, ptCenter.y, r);
     moveTo(ptCenter);
     lineTo(pt);
     stroke();
