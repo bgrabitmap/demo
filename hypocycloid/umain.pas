@@ -19,7 +19,7 @@ unit umain;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls,
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, Spin,
   BGRAVirtualScreen, BGRABitmap, BGRABitmapTypes, BCTypes, BCTrackbarUpdown,
   Math;
 
@@ -28,7 +28,7 @@ type
   { TfrmMain }
 
   TfrmMain = class(TForm)
-    BCTrackbarUpdownNCusped: TBCTrackbarUpdown;
+    BCTrackbarUpdownNCusped: TFloatSpinEdit;
     BGRAVirtualScreen1: TBGRAVirtualScreen;
     Timer1: TTimer;
     procedure BCTrackbarUpdownNCuspedChange(Sender: TObject; AByUser: boolean);
@@ -128,9 +128,9 @@ begin
   end;
 
   // next position
-  if (phi >= 2 * PI) then
+  {if (phi >= 2 * PI) then
     phi := 0
-  else
+  else}
     phi += 0.01;
 end;
 
