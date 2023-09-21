@@ -7,6 +7,7 @@ object frmMain: TfrmMain
   ClientHeight = 240
   ClientWidth = 320
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   Position = poScreenCenter
   LCLVersion = '2.2.6.0'
   object BGRAVirtualScreen1: TBGRAVirtualScreen
@@ -26,17 +27,18 @@ object frmMain: TfrmMain
     OnResize = BGRAVirtualScreen1Resize
     object BCTrackbarUpdownNCusped: TFloatSpinEdit
       Left = 0
-      Height = 22
+      Height = 24
       Top = 0
-      Width = 48
+      Width = 64
+      DecimalPlaces = 3
       Font.Color = clWindowText
       Font.Name = 'Arial'
       MaxValue = 20
-      MinValue = 3
+      MinValue = 2
       OnChange = BCTrackbarUpdownNCuspedChange
       ParentFont = False
       TabOrder = 0
-      Value = 3.14
+      Value = 3.5
     end
   end
   object Timer1: TTimer
