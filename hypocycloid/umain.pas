@@ -2,16 +2,15 @@ unit umain;
 
 {
  Ported from https://codepen.io/enxaneta/pen/WQPdvV
- by Lainz
- v0.1
+ v0.1 by Lainz
   - working demo
- v0.2
+ v0.2 by Circular
   - resize circle
   - full resolution on MacOS
   - DPI size
   - refactor
   - updown to choose nb of cusps
- v0.3
+ v0.3 by Circular
   - render only moving parts
   - stop when loop complete
 }

@@ -27,7 +27,7 @@ object frmMain: TfrmMain
     OnResize = BGRAVirtualScreen1Resize
     object BCTrackbarUpdownNCusped: TFloatSpinEdit
       Left = 0
-      Height = 24
+      Height = 22
       Top = 0
       Width = 64
       DecimalPlaces = 3
