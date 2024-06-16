@@ -18,6 +18,7 @@ type
     cbFillColor: TColorButton;
     cbMRational: TCheckBox;
     cbSpikeOverlap: TCheckBox;
+    ColorDialog1: TColorDialog;
     edValueA: TFloatSpinEdit;
     edValueB: TFloatSpinEdit;
     edValueM: TFloatSpinEdit;
@@ -54,6 +55,7 @@ type
     procedure edValueN3Change(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormDestroy(Sender: TObject);
+    procedure vsPreviewClick(Sender: TObject);
     procedure vsPreviewMouseWheelDown(Sender: TObject; Shift: TShiftState;
       MousePos: TPoint; var Handled: boolean);
     procedure vsPreviewMouseWheelUp(Sender: TObject; Shift: TShiftState;
@@ -61,11 +63,10 @@ type
     procedure vsPreviewRedraw(Sender: TObject; Bitmap: TBGRABitmap);
     procedure FormCreate(Sender: TObject);
   private
-    procedure OriginalChange(ASender: TObject; AOriginal: TBGRALayerCustomOriginal; var ADiff: TBGRAOriginalDiff);
-    procedure UpdateFraction;
-  public
     FLayers: TBGRALayeredBitmap;
     FSuperformula: TBGRALayerSuperformulaOriginal;
+    procedure OriginalChange(ASender: TObject; AOriginal: TBGRALayerCustomOriginal; var ADiff: TBGRAOriginalDiff);
+    procedure UpdateFraction;
   end;
 
 var
@@ -171,6 +172,13 @@ end;
 procedure TfrmSuperFormula.FormDestroy(Sender: TObject);
 begin
   FLayers.Free;
+end;
+
+procedure TfrmSuperFormula.vsPreviewClick(Sender: TObject);
+begin
+  ColorDialog1.Color := vsPreview.Color;
+  if ColorDialog1.Execute then
+    vsPreview.Color := ColorDialog1.Color;
 end;
 
 procedure TfrmSuperFormula.vsPreviewMouseWheelDown(Sender: TObject;
