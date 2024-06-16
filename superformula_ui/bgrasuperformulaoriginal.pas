@@ -7,50 +7,62 @@ interface
 uses
   Classes, SysUtils, BGRALayerOriginal, BGRABitmap, BGRABitmapTypes, Math;
 
-type
+const
+    MaxDenominator = 20;
 
+type
   { TBGRALayerSuperformulaOriginal }
 
   TBGRALayerSuperformulaOriginal = class(TBGRALayerCustomOriginal)
   private
+    FSpikeOverlap: boolean;
     Fa: double;
     Fb: double;
     FFillColor: TBGRAPixel;
     FLineColor: TBGRAPixel;
     FLineWidth: double;
     Fm: double;
+    FMRational: boolean;
     FMultiplier: double;
     Fn1: double;
     Fn2: double;
     Fn3: double;
-    procedure SetFa(AValue: double);
-    procedure SetFb(AValue: double);
-    procedure SetFFillColor(AValue: TBGRAPixel);
-    procedure SetFLineColor(AValue: TBGRAPixel);
-    procedure SetFLineWidth(AValue: double);
-    procedure SetFm(AValue: double);
-    procedure SetFMultiplier(AValue: double);
-    procedure SetFn1(AValue: double);
-    procedure SetFn2(AValue: double);
-    procedure SetFn3(AValue: double);
+    function FloatToFraction(ARatio: single; out num, denom: integer; AMaxDenominator: integer): string;
+    function GetRadius: double;
+    procedure SetA(AValue: double);
+    procedure SetB(AValue: double);
+    procedure SetFillColor(AValue: TBGRAPixel);
+    procedure SetLineColor(AValue: TBGRAPixel);
+    procedure SetLineWidth(AValue: double);
+    procedure SetM(AValue: double);
+    procedure SetMultiplier(AValue: double);
+    procedure SetN1(AValue: double);
+    procedure SetN2(AValue: double);
+    procedure SetN3(AValue: double);
+    procedure SetMRational(AValue: boolean);
+    procedure SetSpikeOverlap(AValue: boolean);
   public
     constructor Create; override;
     procedure Render(ADest: TBGRABitmap; AMatrix: TAffineMatrix;
       ADraft: boolean); override;
     function GetRenderBounds(ADestRect: TRect; {%H-}AMatrix: TAffineMatrix): TRect; override;
+    procedure GetMFraction(out ANumerator, ADenominator: integer);
     procedure LoadFromStorage(AStorage: TBGRACustomOriginalStorage); override;
     procedure SaveToStorage(AStorage: TBGRACustomOriginalStorage); override;
     class function StorageClassName: RawByteString; override;
-    property a: double read Fa write SetFa;
-    property b: double read Fb write SetFb;
-    property m: double read Fm write SetFm;
-    property n1: double read Fn1 write SetFn1;
-    property n2: double read Fn2 write SetFn2;
-    property n3: double read Fn3 write SetFn3;
-    property LineWidth: double read FLineWidth write SetFLineWidth;
-    property LineColor: TBGRAPixel read FLineColor write SetFLineColor;
-    property FillColor: TBGRAPixel read FFillColor write SetFFillColor;
-    property Multiplier: double read FMultiplier write SetFMultiplier;
+    property SpikeOverlap: boolean read FSpikeOverlap write SetSpikeOverlap;
+    property a: double read Fa write SetA;
+    property b: double read Fb write SetB;
+    property m: double read Fm write SetM;
+    property mRational: boolean read FMRational write SetMRational;
+    property n1: double read Fn1 write SetN1;
+    property n2: double read Fn2 write SetN2;
+    property n3: double read Fn3 write SetN3;
+    property Radius: double read GetRadius;
+    property LineWidth: double read FLineWidth write SetLineWidth;
+    property LineColor: TBGRAPixel read FLineColor write SetLineColor;
+    property FillColor: TBGRAPixel read FFillColor write SetFillColor;
+    property Multiplier: double read FMultiplier write SetMultiplier;
   end;
 
 implementation
@@ -91,7 +103,7 @@ begin
     c := exp(tmp);
 end;
 
-function r(theta, a, b, m, n1, n2, n3: double): double;
+function ComputeR(theta, a, b, m, n1, n2, n3: double): double;
 const
   EPS = 1E-9;
 var
@@ -142,7 +154,7 @@ end;
 
 { TBGRALayerSuperformulaOriginal }
 
-procedure TBGRALayerSuperformulaOriginal.SetFa(AValue: double);
+procedure TBGRALayerSuperformulaOriginal.SetA(AValue: double);
 begin
   if Fa = AValue then
     Exit;
@@ -150,7 +162,7 @@ begin
   NotifyChange;
 end;
 
-procedure TBGRALayerSuperformulaOriginal.SetFb(AValue: double);
+procedure TBGRALayerSuperformulaOriginal.SetB(AValue: double);
 begin
   if Fb = AValue then
     Exit;
@@ -158,7 +170,7 @@ begin
   NotifyChange;
 end;
 
-procedure TBGRALayerSuperformulaOriginal.SetFFillColor(AValue: TBGRAPixel);
+procedure TBGRALayerSuperformulaOriginal.SetFillColor(AValue: TBGRAPixel);
 begin
   if FFillColor = AValue then
     Exit;
@@ -166,7 +178,7 @@ begin
   NotifyChange;
 end;
 
-procedure TBGRALayerSuperformulaOriginal.SetFLineColor(AValue: TBGRAPixel);
+procedure TBGRALayerSuperformulaOriginal.SetLineColor(AValue: TBGRAPixel);
 begin
   if FLineColor = AValue then
     Exit;
@@ -174,7 +186,7 @@ begin
   NotifyChange;
 end;
 
-procedure TBGRALayerSuperformulaOriginal.SetFLineWidth(AValue: double);
+procedure TBGRALayerSuperformulaOriginal.SetLineWidth(AValue: double);
 begin
   if FLineWidth = AValue then
     Exit;
@@ -182,7 +194,7 @@ begin
   NotifyChange;
 end;
 
-procedure TBGRALayerSuperformulaOriginal.SetFm(AValue: double);
+procedure TBGRALayerSuperformulaOriginal.SetM(AValue: double);
 begin
   if Fm = AValue then
     Exit;
@@ -190,7 +202,7 @@ begin
   NotifyChange;
 end;
 
-procedure TBGRALayerSuperformulaOriginal.SetFMultiplier(AValue: double);
+procedure TBGRALayerSuperformulaOriginal.SetMultiplier(AValue: double);
 begin
   if FMultiplier = AValue then
     Exit;
@@ -198,7 +210,14 @@ begin
   NotifyChange;
 end;
 
-procedure TBGRALayerSuperformulaOriginal.SetFn1(AValue: double);
+procedure TBGRALayerSuperformulaOriginal.SetMRational(AValue: boolean);
+begin
+  if FMRational=AValue then Exit;
+  FMRational:=AValue;
+  NotifyChange;
+end;
+
+procedure TBGRALayerSuperformulaOriginal.SetN1(AValue: double);
 begin
   if Fn1 = AValue then
     Exit;
@@ -206,7 +225,7 @@ begin
   NotifyChange;
 end;
 
-procedure TBGRALayerSuperformulaOriginal.SetFn2(AValue: double);
+procedure TBGRALayerSuperformulaOriginal.SetN2(AValue: double);
 begin
   if Fn2 = AValue then
     Exit;
@@ -214,7 +233,7 @@ begin
   NotifyChange;
 end;
 
-procedure TBGRALayerSuperformulaOriginal.SetFn3(AValue: double);
+procedure TBGRALayerSuperformulaOriginal.SetN3(AValue: double);
 begin
   if Fn3 = AValue then
     Exit;
@@ -222,9 +241,17 @@ begin
   NotifyChange;
 end;
 
+procedure TBGRALayerSuperformulaOriginal.SetSpikeOverlap(AValue: boolean);
+begin
+  if FSpikeOverlap=AValue then Exit;
+  FSpikeOverlap:=AValue;
+  NotifyChange;
+end;
+
 constructor TBGRALayerSuperformulaOriginal.Create;
 begin
   inherited Create;
+  FSpikeOverlap:= true;
   Fa := 1;
   Fb := 1;
   Fm := 24;
@@ -235,38 +262,108 @@ begin
   FLineColor := $00804000;
   FFillColor := $00C08000;
   FMultiplier := 200;
+  FMRational:= true;
+end;
+
+function TBGRALayerSuperformulaOriginal.FloatToFraction(ARatio: single; out num,
+  denom: integer; AMaxDenominator: integer): string;
+
+  procedure InvFrac;
+  var temp: integer;
+  begin
+    temp := num;
+    num := denom;
+    denom := temp;
+  end;
+
+  procedure AddFrac(AValue: integer);
+  begin
+    inc(num, AValue*denom);
+  end;
+
+const MaxDev = 6;
+var
+  dev: array[1..MaxDev] of integer;
+  devCount, i: integer;
+  curVal, remain: Single;
+
+begin
+  if ARatio < 0 then ARatio := -ARatio;
+  curVal := ARatio;
+  devCount := 0;
+  repeat
+    inc(devCount);
+    dev[devCount] := trunc(curVal);
+    remain := frac(curVal);
+    if abs(remain) < 1e-3 then break;
+    if devCount = MaxDev then
+    begin
+      if remain > 0.5 then inc(dev[devCount]);
+      break;
+    end;
+    curVal := 1/remain;
+  until false;
+  repeat
+    num := dev[devCount];
+    denom := 1;
+    for i := devCount-1 downto 1 do
+    begin
+      InvFrac;
+      AddFrac(dev[i]);
+    end;
+    if ((num >= denom) and (denom <= AMaxDenominator))
+       or ((num < denom) and (num <= AMaxDenominator))
+       or (devCount = 1) then break;
+    dec(devCount);
+  until false;
+  result := IntToStr(num)+':'+IntToStr(denom);
+end;
+
+function TBGRALayerSuperformulaOriginal.GetRadius: double;
+begin
+  result := 1;
 end;
 
 procedure TBGRALayerSuperformulaOriginal.Render(ADest: TBGRABitmap;
   AMatrix: TAffineMatrix; ADraft: boolean);
 var
-  theta: double;
-  rad: double;
-  x: double = 0;
-  y: double = 0;
+  i, num, denom, precision, turns: integer;
+  r, theta, usedM, approxM, correction: double;
 begin
   try
-    theta := 0.001;
+    ADest.Canvas2D.save;
     ADest.Canvas2D.antialiasing := not ADraft;
-    ADest.Canvas2D.resetTransform;
-    ADest.Canvas2D.translate(ADest.Width div 2, ADest.Height div 2);
+    ADest.Canvas2D.transform(AMatrix);
     ADest.Canvas2D.lineWidth := FLineWidth;
     ADest.Canvas2D.strokeStyle(FLineColor);
     ADest.Canvas2D.fillStyle(FFillColor);
     ADest.Canvas2D.beginPath;
-    while (theta <= 2 * pi) do
+    FloatToFraction(m, num, denom, MaxDenominator);
+    approxM := num/denom;
+    precision := max(num * 50, 90);
+    if precision > 3000 then
+      precision := (3000 div num)*num;
+    if mRational then
     begin
-      rad := r(theta, Fa, Fb, Fm, Fn1, Fn2,
-        Fn3);
-      x := rad * cos(theta) * FMultiplier;
-      y := rad * sin(theta) * FMultiplier;
-      ADest.Canvas2D.lineTo(x, y);
-      theta += 0.001;
+      usedM := approxM;
+      correction := 1;
+    end else
+    begin
+      usedM:= m;
+      correction := approxM / m;
+    end;
+    turns := denom * (1 + integer(SpikeOverlap and odd(num) and ((a <> b) or (n2 <> n3))));
+    for i := 0 to precision * turns do
+    begin
+      theta := i * 2 * Pi * correction / precision;
+      r := ComputeR(theta, a, b, usedM, n1, n2, n3) * multiplier;
+      ADest.Canvas2D.lineTo(r * cos(theta), r * sin(theta));
     end;
     ADest.Canvas2D.closePath;
     ADest.Canvas2D.fill;
     if FLineWidth > 0 then
       ADest.Canvas2D.stroke;
+    ADest.Canvas2D.restore;
   except
     on e: Exception do ;
   end;
@@ -278,14 +375,22 @@ begin
   result := ADestRect;
 end;
 
+procedure TBGRALayerSuperformulaOriginal.GetMFraction(out ANumerator,
+  ADenominator: integer);
+begin
+  FloatToFraction(m, ANumerator, ADenominator, MaxDenominator);
+end;
+
 procedure TBGRALayerSuperformulaOriginal.LoadFromStorage(
   AStorage: TBGRACustomOriginalStorage);
 var
   colorArray: ArrayOfTBGRAPixel;
 begin
+  FSpikeOverlap:= AStorage.BoolDef['spike-overlap', false];
   Fa := AStorage.Float['a'];
   Fb := AStorage.Float['b'];
   Fm := AStorage.Float['m'];
+  FMRational:= AStorage.BoolDef['m-rational', true];
   Fn1 := AStorage.Float['n1'];
   Fn2 := AStorage.Float['n2'];
   Fn3 := AStorage.Float['n3'];
@@ -302,9 +407,11 @@ procedure TBGRALayerSuperformulaOriginal.SaveToStorage(
 var
   colorArray: ArrayOfTBGRAPixel;
 begin
+  AStorage.Bool['spike-overlap'] := FSpikeOverlap;
   AStorage.Float['a'] := Fa;
   AStorage.Float['b'] := Fb;
   AStorage.Float['m'] := Fm;
+  AStorage.Bool['m-rational'] := FMRational;
   AStorage.Float['n1'] := Fn1;
   AStorage.Float['n2'] := Fn2;
   AStorage.Float['n3'] := Fn3;

@@ -1,37 +1,38 @@
 object frmSuperFormula: TfrmSuperFormula
   Left = 348
-  Height = 560
+  Height = 1120
   Top = 143
-  Width = 400
+  Width = 1142
   Caption = 'Superformula'
-  ClientHeight = 560
-  ClientWidth = 400
+  ClientHeight = 1120
+  ClientWidth = 1142
+  DesignTimePPI = 192
   OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   Position = poScreenCenter
-  LCLVersion = '2.2.2.0'
+  LCLVersion = '3.4.0.0'
   object vsPreview: TBGRAVirtualScreen
     Left = 0
-    Height = 377
-    Top = 183
-    Width = 400
+    Height = 898
+    Top = 222
+    Width = 1142
     OnRedraw = vsPreviewRedraw
+    BitmapAutoScale = False
     Align = alClient
     Alignment = taLeftJustify
     Color = clWhite
     ParentColor = False
     ParentFont = False
     TabOrder = 0
-    OnClick = vsPreviewClick
     OnMouseWheelDown = vsPreviewMouseWheelDown
     OnMouseWheelUp = vsPreviewMouseWheelUp
   end
   object pnlControls: TPanel
     Left = 0
-    Height = 183
+    Height = 222
     Top = 0
-    Width = 400
+    Width = 1142
     Align = alTop
     AutoSize = True
     ChildSizing.LeftRightSpacing = 16
@@ -40,93 +41,147 @@ object frmSuperFormula: TfrmSuperFormula
     ChildSizing.VerticalSpacing = 8
     ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
-    ChildSizing.ControlsPerLine = 4
-    ClientHeight = 183
-    ClientWidth = 400
+    ChildSizing.ControlsPerLine = 6
+    ClientHeight = 222
+    ClientWidth = 1142
     ParentFont = False
     TabOrder = 1
-    object lblValueA: TLabel
-      Left = 16
-      Height = 24
-      Top = 16
-      Width = 113
-      Caption = 'Spikes A:'
+    object lblLineColor: TLabel
+      Left = 17
+      Height = 44
+      Top = 17
+      Width = 240
+      Caption = 'Line Color:'
       ParentColor = False
       ParentFont = False
     end
-    object edValueA: TFloatSpinEdit
-      Left = 145
-      Height = 24
-      Top = 16
-      Width = 66
-      DecimalPlaces = 3
-      Increment = 0.05
-      MaxValue = 1000000
-      MinValue = 0.1
-      OnChange = edValueAChange
+    object cbLineColor: TColorButton
+      Left = 273
+      Height = 44
+      Top = 17
+      Width = 143
+      BorderWidth = 4
+      ButtonColorSize = 32
+      ButtonColor = 8404992
+      Constraints.MinHeight = 44
+      OnColorChanged = cbLineColorColorChanged
       ParentFont = False
-      TabOrder = 0
-      Value = 1
     end
-    object lblValueB: TLabel
-      Left = 227
-      Height = 24
-      Top = 16
-      Width = 76
-      Caption = 'Spikes B:'
+    object lblLineWidth: TLabel
+      Left = 432
+      Height = 44
+      Top = 17
+      Width = 163
+      Caption = 'Line Width:'
       ParentColor = False
       ParentFont = False
     end
-    object edValueB: TFloatSpinEdit
-      Left = 319
-      Height = 24
-      Top = 16
-      Width = 65
-      DecimalPlaces = 3
-      Increment = 0.05
-      MaxValue = 1000000
-      MinValue = 0.1
-      OnChange = edValueBChange
+    object edLineWidth: TFloatSpinEdit
+      Left = 611
+      Height = 44
+      Top = 17
+      Width = 143
+      MaxValue = 100
+      OnChange = edLineWidthChange
       ParentFont = False
-      TabOrder = 1
-      Value = 1
+      TabOrder = 7
+    end
+    object lblFillColor: TLabel
+      Left = 770
+      Height = 44
+      Top = 17
+      Width = 201
+      Caption = 'Fill Color:'
+      ParentColor = False
+      ParentFont = False
+    end
+    object cbFillColor: TColorButton
+      Left = 987
+      Height = 44
+      Top = 17
+      Width = 138
+      BorderWidth = 4
+      ButtonColorSize = 32
+      ButtonColor = 12615680
+      OnColorChanged = cbFillColorColorChanged
+      ParentFont = False
     end
     object lblValueM: TLabel
-      Left = 16
-      Height = 24
-      Top = 48
-      Width = 113
+      Left = 17
+      Height = 40
+      Top = 69
+      Width = 240
       Caption = 'Number of Spikes:'
       ParentColor = False
       ParentFont = False
     end
     object edValueM: TFloatSpinEdit
-      Left = 145
-      Height = 24
-      Top = 48
-      Width = 66
-      DecimalPlaces = 3
-      MaxValue = 1000000
-      MinValue = 0.1
+      Left = 273
+      Height = 40
+      Top = 69
+      Width = 143
+      Increment = 0.2
+      MaxValue = 100
+      MinValue = 0.01
       OnChange = edValueMChange
       ParentFont = False
       TabOrder = 2
-      Value = 24
+      Value = 3
+    end
+    object Label1: TLabel
+      Left = 432
+      Height = 40
+      Top = 69
+      Width = 163
+      Caption = 'm rational:'
+    end
+    object cbMRational: TCheckBox
+      Left = 611
+      Height = 40
+      Top = 69
+      Width = 143
+      Checked = True
+      State = cbChecked
+      TabOrder = 8
+      OnChange = cbMRationalChange
+    end
+    object lblMultiplier: TLabel
+      Left = 770
+      Height = 40
+      Top = 69
+      Width = 201
+      Caption = 'Size Multiplier:'
+      ParentColor = False
+      ParentFont = False
+    end
+    object edMultiplier: TFloatSpinEdit
+      Left = 987
+      Height = 40
+      Top = 69
+      Width = 138
+      DecimalPlaces = 0
+      Increment = 25
+      MaxValue = 1000000
+      MinValue = 1
+      OnChange = edMultiplierChange
+      ParentFont = False
+      TabOrder = 6
+      Value = 200
     end
     object lblValueN1: TLabel
-      Left = 227
-      Height = 24
-      Top = 48
-      Width = 76
+      Left = 17
+      Height = 40
+      Top = 117
+      Width = 240
       Caption = 'Shape N1:'
       ParentColor = False
       ParentFont = False
     end
     object edValueN1: TFloatSpinEdit
-      Left = 319
-      Height = 24
-      Top = 48
-      Width = 65
+      Left = 273
+      Height = 40
+      Top = 117
+      Width = 143
       DecimalPlaces = 3
       Increment = 0.05
       MaxValue = 1000000
@@ -137,19 +192,19 @@ object frmSuperFormula: TfrmSuperFormula
       Value = 2
     end
     object lblValueN2: TLabel
-      Left = 16
-      Height = 24
-      Top = 80
-      Width = 113
+      Left = 432
+      Height = 40
+      Top = 117
+      Width = 163
       Caption = 'Shape N2:'
       ParentColor = False
       ParentFont = False
     end
     object edValueN2: TFloatSpinEdit
-      Left = 145
-      Height = 24
-      Top = 80
-      Width = 66
+      Left = 611
+      Height = 40
+      Top = 117
+      Width = 143
       DecimalPlaces = 3
       Increment = 0.05
       MaxValue = 1000000
@@ -160,19 +215,19 @@ object frmSuperFormula: TfrmSuperFormula
       Value = 1
     end
     object lblValueN3: TLabel
-      Left = 227
-      Height = 24
-      Top = 80
-      Width = 76
+      Left = 770
+      Height = 40
+      Top = 117
+      Width = 201
       Caption = 'Shape N3:'
       ParentColor = False
       ParentFont = False
     end
     object edValueN3: TFloatSpinEdit
-      Left = 319
-      Height = 24
-      Top = 80
-      Width = 65
+      Left = 987
+      Height = 40
+      Top = 117
+      Width = 138
       DecimalPlaces = 3
       Increment = 0.05
       MaxValue = 1000000
@@ -182,88 +237,68 @@ object frmSuperFormula: TfrmSuperFormula
       TabOrder = 5
       Value = 2
     end
-    object lblMultiplier: TLabel
-      Left = 16
-      Height = 24
-      Top = 112
-      Width = 113
-      Caption = 'Size Multiplier:'
+    object Label2: TLabel
+      Left = 17
+      Height = 40
+      Top = 165
+      Width = 240
+      Caption = 'Spike overlap:'
+    end
+    object cbSpikeOverlap: TCheckBox
+      Left = 273
+      Height = 40
+      Top = 165
+      Width = 143
+      Checked = True
+      State = cbChecked
+      TabOrder = 9
+      OnChange = cbSpikeOverlapChange
+    end
+    object lblValueA: TLabel
+      Left = 432
+      Height = 40
+      Top = 165
+      Width = 163
+      Caption = 'Spikes A:'
       ParentColor = False
       ParentFont = False
     end
-    object edMultiplier: TFloatSpinEdit
-      Left = 145
-      Height = 24
-      Top = 112
-      Width = 66
-      DecimalPlaces = 0
-      Increment = 25
+    object edValueA: TFloatSpinEdit
+      Left = 611
+      Height = 40
+      Top = 165
+      Width = 143
+      DecimalPlaces = 3
+      Increment = 0.05
       MaxValue = 1000000
-      MinValue = 1
-      OnChange = edMultiplierChange
+      MinValue = 0.1
+      OnChange = edValueAChange
       ParentFont = False
-      TabOrder = 6
-      Value = 200
+      TabOrder = 0
+      Value = 1
     end
-    object lblLineWidth: TLabel
-      Left = 227
-      Height = 24
-      Top = 112
-      Width = 76
-      Caption = 'Line Width:'
+    object lblValueB: TLabel
+      Left = 770
+      Height = 40
+      Top = 165
+      Width = 201
+      Caption = 'Spikes B:'
       ParentColor = False
       ParentFont = False
     end
-    object edLineWidth: TFloatSpinEdit
-      Left = 319
-      Height = 24
-      Top = 112
-      Width = 65
-      MaxValue = 100
-      OnChange = edLineWidthChange
+    object edValueB: TFloatSpinEdit
+      Left = 987
+      Height = 40
+      Top = 165
+      Width = 138
+      DecimalPlaces = 3
+      Increment = 0.05
+      MaxValue = 1000000
+      MinValue = 0.1
+      OnChange = edValueBChange
       ParentFont = False
-      TabOrder = 7
-    end
-    object lblLineColor: TLabel
-      Left = 16
-      Height = 22
-      Top = 144
-      Width = 113
-      Caption = 'Line Color:'
-      ParentColor = False
-      ParentFont = False
-    end
-    object cbLineColor: TColorButton
-      Left = 145
-      Height = 22
-      Top = 144
-      Width = 66
-      BorderWidth = 2
-      ButtonColorSize = 16
-      ButtonColor = 8404992
-      Constraints.MinHeight = 22
-      OnColorChanged = cbLineColorColorChanged
-      ParentFont = False
-    end
-    object lblFillColor: TLabel
-      Left = 227
-      Height = 22
-      Top = 144
-      Width = 76
-      Caption = 'Fill Color:'
-      ParentColor = False
-      ParentFont = False
-    end
-    object cbFillColor: TColorButton
-      Left = 319
-      Height = 22
-      Top = 144
-      Width = 65
-      BorderWidth = 2
-      ButtonColorSize = 16
-      ButtonColor = 12615680
-      OnColorChanged = cbFillColorColorChanged
-      ParentFont = False
+      TabOrder = 1
+      Value = 1
     end
   end
 end

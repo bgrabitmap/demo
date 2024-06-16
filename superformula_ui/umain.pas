@@ -16,6 +16,8 @@ type
   TfrmSuperFormula = class(TForm)
     cbLineColor: TColorButton;
     cbFillColor: TColorButton;
+    cbMRational: TCheckBox;
+    cbSpikeOverlap: TCheckBox;
     edValueA: TFloatSpinEdit;
     edValueB: TFloatSpinEdit;
     edValueM: TFloatSpinEdit;
@@ -24,6 +26,8 @@ type
     edValueN3: TFloatSpinEdit;
     edMultiplier: TFloatSpinEdit;
     edLineWidth: TFloatSpinEdit;
+    Label1: TLabel;
+    Label2: TLabel;
     lblFillColor: TLabel;
     lblLineColor: TLabel;
     lblLineWidth: TLabel;
@@ -37,7 +41,9 @@ type
     pnlControls: TPanel;
     vsPreview: TBGRAVirtualScreen;
     procedure cbFillColorColorChanged(Sender: TObject);
+    procedure cbMRationalChange(Sender: TObject);
     procedure cbLineColorColorChanged(Sender: TObject);
+    procedure cbSpikeOverlapChange(Sender: TObject);
     procedure edLineWidthChange(Sender: TObject);
     procedure edMultiplierChange(Sender: TObject);
     procedure edValueAChange(Sender: TObject);
@@ -48,7 +54,6 @@ type
     procedure edValueN3Change(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormDestroy(Sender: TObject);
-    procedure vsPreviewClick(Sender: TObject);
     procedure vsPreviewMouseWheelDown(Sender: TObject; Shift: TShiftState;
       MousePos: TPoint; var Handled: boolean);
     procedure vsPreviewMouseWheelUp(Sender: TObject; Shift: TShiftState;
@@ -57,8 +62,10 @@ type
     procedure FormCreate(Sender: TObject);
   private
     procedure OriginalChange(ASender: TObject; AOriginal: TBGRALayerCustomOriginal; var ADiff: TBGRAOriginalDiff);
+    procedure UpdateFraction;
   public
     FLayers: TBGRALayeredBitmap;
+    FSuperformula: TBGRALayerSuperformulaOriginal;
   end;
 
 var
@@ -66,108 +73,104 @@ var
 
 implementation
 
+uses BGRATransform;
+
 {$R *.lfm}
 
 { TfrmSuperFormula }
 
 procedure TfrmSuperFormula.vsPreviewRedraw(Sender: TObject; Bitmap: TBGRABitmap);
+var
+  zoom: single;
+  matrix: TAffineMatrix;
 begin
+  zoom := DesignTimePPI / 96 * GetCanvasScaleFactor;
+  matrix := AffineMatrixTranslation(Bitmap.Width/2, Bitmap.Height/2) *
+      AffineMatrixScale(zoom, zoom);
+  if not Assigned(FLayers) then
+  begin
+    FLayers := TBGRALayeredBitmap.Create(Bitmap.Width, Bitmap.Height);
+    Flayers.OnOriginalChange := @OriginalChange;
+    FLayers.AddLayerFromOwnedOriginal(FSuperformula, matrix);
+    FLayers.RenderOriginalsIfNecessary;
+  end else
+  if (Bitmap.Width <> FLayers.Width) or (Bitmap.Height <> FLayers.Height) then
+  begin
+    FLayers.SetSize(Bitmap.Width, Bitmap.Height);
+    FLayers.LayerOriginalMatrix[0] := matrix;
+    FLayers.RenderLayerFromOriginal(0);
+  end else
+  begin
+    FLayers.LayerOriginalMatrix[0] := matrix;
+    FLayers.RenderOriginalsIfNecessary;
+  end;
+
   FLayers.Draw(Bitmap, 0, 0);
 end;
 
 procedure TfrmSuperFormula.edValueAChange(Sender: TObject);
-var
-  orig: TBGRALayerSuperformulaOriginal;
 begin
-  orig := FLayers.Original[0] as TBGRALayerSuperformulaOriginal;
-  orig.a := edValueA.Value;
+  FSuperformula.a := edValueA.Value;
 end;
 
 procedure TfrmSuperFormula.edMultiplierChange(Sender: TObject);
-var
-  orig: TBGRALayerSuperformulaOriginal;
 begin
-  orig := FLayers.Original[0] as TBGRALayerSuperformulaOriginal;
-  orig.Multiplier := edMultiplier.Value;
+  FSuperformula.Multiplier := edMultiplier.Value;
 end;
 
 procedure TfrmSuperFormula.edLineWidthChange(Sender: TObject);
-var
-  orig: TBGRALayerSuperformulaOriginal;
 begin
-  orig := FLayers.Original[0] as TBGRALayerSuperformulaOriginal;
-  orig.LineWidth := edLineWidth.Value;
+  FSuperformula.LineWidth := edLineWidth.Value;
 end;
 
 procedure TfrmSuperFormula.cbLineColorColorChanged(Sender: TObject);
-var
-  orig: TBGRALayerSuperformulaOriginal;
 begin
-  orig := FLayers.Original[0] as TBGRALayerSuperformulaOriginal;
-  orig.LineColor := cbLineColor.ButtonColor;
+  FSuperformula.LineColor := cbLineColor.ButtonColor;
+end;
+
+procedure TfrmSuperFormula.cbSpikeOverlapChange(Sender: TObject);
+begin
+  FSuperformula.SpikeOverlap:= cbSpikeOverlap.Checked;
 end;
 
 procedure TfrmSuperFormula.cbFillColorColorChanged(Sender: TObject);
-var
-  orig: TBGRALayerSuperformulaOriginal;
 begin
-  orig := FLayers.Original[0] as TBGRALayerSuperformulaOriginal;
-  orig.FillColor := cbFillColor.ButtonColor;
+  FSuperformula.FillColor := cbFillColor.ButtonColor;
+end;
+
+procedure TfrmSuperFormula.cbMRationalChange(Sender: TObject);
+begin
+  FSuperformula.mRational:= cbMRational.Checked;
 end;
 
 procedure TfrmSuperFormula.edValueBChange(Sender: TObject);
-var
-  orig: TBGRALayerSuperformulaOriginal;
 begin
-  orig := FLayers.Original[0] as TBGRALayerSuperformulaOriginal;
-  orig.b := edValueB.Value;
+  FSuperformula.b := edValueB.Value;
 end;
 
 procedure TfrmSuperFormula.edValueMChange(Sender: TObject);
-var
-  orig: TBGRALayerSuperformulaOriginal;
 begin
-  orig := FLayers.Original[0] as TBGRALayerSuperformulaOriginal;
-  orig.m := edValueM.Value;
+  FSuperformula.m := edValueM.Value;
 end;
 
 procedure TfrmSuperFormula.edValueN1Change(Sender: TObject);
-var
-  orig: TBGRALayerSuperformulaOriginal;
 begin
-  orig := FLayers.Original[0] as TBGRALayerSuperformulaOriginal;
-  orig.n1 := edValueN1.Value;
+  FSuperformula.n1 := edValueN1.Value;
 end;
 
 procedure TfrmSuperFormula.edValueN2Change(Sender: TObject);
-var
-  orig: TBGRALayerSuperformulaOriginal;
 begin
-  orig := FLayers.Original[0] as TBGRALayerSuperformulaOriginal;
-  orig.n2 := edValueN2.Value;
+  FSuperformula.n2 := edValueN2.Value;
 end;
 
 procedure TfrmSuperFormula.edValueN3Change(Sender: TObject);
-var
-  orig: TBGRALayerSuperformulaOriginal;
 begin
-  orig := FLayers.Original[0] as TBGRALayerSuperformulaOriginal;
-  orig.n3 := edValueN3.Value;
-end;
-
-procedure TfrmSuperFormula.FormClose(Sender: TObject; var CloseAction: TCloseAction);
-begin
-  FLayers.Original[0].SaveToFile(Application.Location + 'superformula.data');
+  FSuperformula.n3 := edValueN3.Value;
 end;
 
 procedure TfrmSuperFormula.FormDestroy(Sender: TObject);
 begin
   FLayers.Free;
-end;
-
-procedure TfrmSuperFormula.vsPreviewClick(Sender: TObject);
-begin
-  cbFillColor.Click;
 end;
 
 procedure TfrmSuperFormula.vsPreviewMouseWheelDown(Sender: TObject;
@@ -183,8 +186,6 @@ begin
 end;
 
 procedure TfrmSuperFormula.FormCreate(Sender: TObject);
-var
-  superformula: TBGRALayerSuperformulaOriginal;
 begin
   {$ifdef Windows}
   DoubleBuffered := True;
@@ -192,32 +193,44 @@ begin
   cbLineColor.Constraints.MinHeight := edValueA.Height;
   cbFillColor.Constraints.MinHeight := edValueA.Height;
 
-  FLayers := TBGRALayeredBitmap.Create(vsPreview.Width, vsPreview.Height);
-  Flayers.OnOriginalChange := @OriginalChange;
-
-  superformula := TBGRALayerSuperformulaOriginal.Create;
-  FLayers.AddLayerFromOwnedOriginal(superformula);
+  FSuperformula := TBGRALayerSuperformulaOriginal.Create;
 
   if FileExists(Application.Location + 'superformula.data') then
-  begin
-    superformula.LoadFromFile(Application.Location + 'superformula.data');
-    cbLineColor.ButtonColor := superformula.LineColor;
-    cbFillColor.ButtonColor := superformula.FillColor;
-    edValueA.Value := superformula.a;
-    edValueB.Value := superformula.b;
-    edValueM.Value := superformula.m;
-    edValueN1.Value := superformula.n1;
-    edValueN2.Value := superformula.n2;
-    edValueN3.Value := superformula.n3;
-    edMultiplier.Value := superformula.Multiplier;
-    edLineWidth.Value := superformula.LineWidth;
-  end;
+    FSuperformula.LoadFromFile(Application.Location + 'superformula.data');
+
+  cbLineColor.ButtonColor := FSuperformula.LineColor;
+  cbFillColor.ButtonColor := FSuperformula.FillColor;
+  cbSpikeOverlap.Checked := FSuperformula.SpikeOverlap;
+  edValueA.Value := FSuperformula.a;
+  edValueB.Value := FSuperformula.b;
+  edValueM.Value := FSuperformula.m;
+  UpdateFraction;
+  cbMRational.Checked:= FSuperformula.mRational;
+  edValueN1.Value := FSuperformula.n1;
+  edValueN2.Value := FSuperformula.n2;
+  edValueN3.Value := FSuperformula.n3;
+  edMultiplier.Value := FSuperformula.Multiplier;
+  edLineWidth.Value := FSuperformula.LineWidth;
+end;
+
+procedure TfrmSuperFormula.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  FSuperformula.SaveToFile(Application.Location + 'superformula.data');
 end;
 
 procedure TfrmSuperFormula.OriginalChange(ASender: TObject;
   AOriginal: TBGRALayerCustomOriginal; var ADiff: TBGRAOriginalDiff);
 begin
   vsPreview.DiscardBitmap;
+  UpdateFraction;
+end;
+
+procedure TfrmSuperFormula.UpdateFraction;
+var
+  Num, Denom: integer;
+begin
+  FSuperformula.GetMFraction(Num, Denom);
+  cbMRational.Caption := IntToStr(Num) + '/' + IntToStr(Denom);
 end;
 
 end.
