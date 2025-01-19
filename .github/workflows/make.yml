@@ -33,5 +33,7 @@ jobs:
     - name: Build
       shell: bash
       run: |
+        set -xeuo pipefail
         sudo bash -c 'apt-get update; apt-get install -y lazarus' >/dev/null
-        instantfpc "-Fu/usr/lib/lazarus/3.0/components/lazutils" .github/workflows/make.pas
+        instantfpc -Fu/usr/lib/lazarus/*/components/lazutils \
+          -B '.github/workflows/make.pas'
